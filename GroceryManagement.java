@@ -1,4 +1,6 @@
-  /**
+//Task 2: Restock and Search
+
+/**
     *Main entry point execution block for testing the grocery application
     *
     *@param args command line arguements 
