@@ -15,15 +15,17 @@ import java.util.Scanner;
  *   <li>Dang Nguyen - user menu ({@code feature-menu})</li>
  *   <li>Ella Farrell - inventory display ({@code feature-display})</li>
  *   <li>Hunter Norris - restock and search ({@code feature-restock})</li>
+ *   <li>Kalie Newman - input validation, cleanup, and documentation ({@code cleanup})</li>
  * </ul>
  *
  * @author Dang Nguyen
  * @author Ella Farrell
  * @author Hunter Norris
+ * @author Kalie Newman
  */
 
 public class GroceryManagement {
-       /**
+    /**
      * Entry point of the program. Sets up the parallel arrays with sample
      * data, then runs a menu loop that lets the user view the inventory,
      * restock an item, or exit.
@@ -39,12 +41,13 @@ public class GroceryManagement {
      * Written by Dang Nguyen ({@code feature-menu}).
      * </p>
      *
+     * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
         String[] itemNames = new String[10];
         double[] itemPrices = new double[10];
         int[] itemStocks = new int[10];
-        
+
         itemNames[0] = "Oranges"; itemPrices[0] = 50; itemStocks[0] = 3;
         itemNames[1] = "Apples";  itemPrices[1] = 30; itemStocks[1] = 7;
         itemNames[2] = "Milk";    itemPrices[2] = 15; itemStocks[2] = 3;
@@ -56,26 +59,25 @@ public class GroceryManagement {
             System.out.println("1. View");
             System.out.println("2. Restock");
             System.out.println("3. Exit");
-            System.out.print("Please enter your choice (1-3): ");
 
-            int choice = scanner.nextInt();
-            System.out.println("Your choice is " + choice);
+            int choice = readInt(scanner, "Please enter your choice (1-3): ");
             switch(choice) {
                 case 1:
                     printInventory(itemNames, itemPrices, itemStocks);
                     break;
                 case 2:
-                    scanner.nextLine();
                     System.out.print("What item do you want to restock: ");
-                    String item = scanner.nextLine();
+                    String item = scanner.nextLine().trim();
 
-                    System.out.print("Enter amount: ");
-                    int amount = scanner.nextInt();
-
-                    restockItem(itemNames, itemStocks, item, amount);
+                    int amount = readInt(scanner, "Enter amount: ");
+                    if (amount <= 0) {
+                        System.out.println("Amount must be greater than 0.");
+                    } else {
+                        restockItem(itemNames, itemStocks, item, amount);
+                    }
                     break;
                 case 3:
-                    System.out.println("Exit sucessfully. Have a nice day!");
+                    System.out.println("Exited successfully. Have a nice day!");
                     scanner.close();
                     return;
                 default:
@@ -85,8 +87,34 @@ public class GroceryManagement {
     }
 
     /**
+     * Repeatedly prompts the user until a valid whole number is entered.
+     * Non-numeric input is rejected with a message instead of crashing
+     * the program, and the prompt is shown again.
+     * <p>
+     * Written by Kalie Newman ({@code cleanup}).
+     * </p>
+     *
+     * @param scanner the {@code Scanner} to read input from
+     * @param prompt  the message to display before each read attempt
+     * @return the valid integer entered by the user
+     */
+    public static int readInt(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a whole number.");
+            }
+        }
+    }
+
+    /**
      * Displays every non-empty item in the inventory with its price and
-     * stock amount. Slots where the item name is {@code null} are skipped.
+     * stock amount. Slots where the item name is {@code null} are skipped
+     * and counted as empty; the total number of empty slots is printed
+     * after the inventory listing.
      * <p>
      * Written by Ella Farrell ({@code feature-display}).
      * </p>
@@ -95,15 +123,21 @@ public class GroceryManagement {
      * @param prices the array of item prices, parallel to {@code names}
      * @param stocks the array of stock amounts, parallel to {@code names}
      */
-    public static void printInventory(String[]names, double[] prices, int[] stocks)
+    public static void printInventory(String[] names, double[] prices, int[] stocks)
     {
+        int emptySlots = 0;
         for(int i = 0; i < names.length; i++)
         {
             if(names[i] != null)
             {
-                System.out.println(names[i] + " - $" + prices[i] + ", Stock: " + stocks[i]);
+                System.out.printf("%s - $%.2f, Stock: %d%n", names[i], prices[i], stocks[i]);
+            }
+            else
+            {
+                emptySlots++;
             }
         }
+        System.out.println("Empty slots: " + emptySlots);
     }
 
     /**
@@ -120,25 +154,27 @@ public class GroceryManagement {
      * @param amount the quantity to add to the item's stock
      */
     public static void restockItem(String[] names, int[] stocks, String target, int amount){
-        //flag variabklke to track if the target item is successfully located during the search
+        //flag variable to track if the target item is successfully located during the search
         boolean itemFound = false;
 
         for(int i = 0; i < names.length; i++){
-            //Using .equals() because == checks memory refrence identity
+            //Using .equals() because == checks memory reference identity
             if (names[i] != null && names[i].equals(target)){
-                //Updates the stock at the parrallel index mapping 
+                //Updates the stock at the parallel index mapping
                 stocks[i] += amount;
 
-                //flip tracking flag to true since element was located 
+                //flip tracking flag to true since element was located
                 itemFound = true;
 
-                //Break out when the loop once item name is found
+                System.out.println("Restocked " + names[i] + ". New stock: " + stocks[i]);
+
+                //Break out of the loop once the item name is found
                 break;
             }
         }
 
         if(!itemFound){
             System.out.println("Item not found.");
-        }  
+        }
     }
 }
