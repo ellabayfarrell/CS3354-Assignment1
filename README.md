@@ -7,6 +7,27 @@ A command-line grocery management system written in Java. It uses **parallel arr
 
 ---
 
+## How It Works
+
+The program models a small grocery inventory using **three parallel arrays** of size 10:
+
+- `itemNames` (`String[]`) — the name of each item
+- `itemPrices` (`double[]`) — the price of each item
+- `itemStocks` (`int[]`) — the quantity in stock
+
+The same index in all three arrays always refers to the same item (e.g. `itemNames[2]`, `itemPrices[2]`, and `itemStocks[2]` are Milk's name, price, and stock). Unused slots are left as `null` in `itemNames`, which the display logic uses to know which indices are empty.
+
+`main` sets up the arrays with four starter items (Oranges, Apples, Milk, Lettuce) and then runs a loop that repeatedly:
+
+1. Prints the menu (View / Restock / Exit).
+2. Reads the choice with `readInt`, which keeps re-prompting until it gets a valid whole number instead of crashing on non-numeric input.
+3. Dispatches to the matching method:
+   - **1 (View)** — calls `printInventory`, which walks the arrays and prints every non-null item, counting and reporting empty slots.
+   - **2 (Restock)** — reads an item name and an amount (validated with `readInt`, rejecting zero/negative amounts), then calls `restockItem`, which searches `itemNames` for a case-sensitive match and adds the amount to the matching index in `itemStocks`, or prints "Item not found." if there's no match.
+   - **3 (Exit)** — prints a goodbye message and returns, ending the loop.
+
+---
+
 ## Team Members & Contributions
 
 | Member | Branch | Task | Method(s) |
@@ -46,7 +67,24 @@ A command-line grocery management system written in Java. It uses **parallel arr
 .
 ├── GroceryManagement.java   # Source code
 ├── docs/                    # Generated Javadoc documentation
+├── screenshots/             # Screenshots of the program running
 └── README.md
+```
+
+---
+
+## UML Class Diagram
+
+The program is intentionally a single class (`GroceryManagement`) with static methods operating on parallel arrays, rather than an object-oriented design with a separate `Item` class — this matches the assignment's parallel-array requirement.
+
+```mermaid
+classDiagram
+    class GroceryManagement {
+        +main(args: String[]) void
+        +readInt(scanner: Scanner, prompt: String) int
+        +printInventory(names: String[], prices: double[], stocks: int[]) void
+        +restockItem(names: String[], stocks: int[], target: String, amount: int) void
+    }
 ```
 
 ---
@@ -68,6 +106,18 @@ java GroceryManagement
 3. Exit
 Please enter your choice (1-3):
 ```
+
+---
+
+## Program Execution Screenshots
+
+Screenshots demonstrating the program running successfully are in the [`screenshots/`](screenshots) folder:
+
+| Screenshot | Demonstrates |
+|---|---|
+| [`01-menu-view-invalid-input.png`](screenshots/01-menu-view-invalid-input.png) | The menu, viewing the full inventory (with empty-slot count), and an invalid menu entry re-prompting instead of crashing |
+| [`02-restock-item.png`](screenshots/02-restock-item.png) | Restocking an existing item (Milk, +10) with a confirmation message |
+| [`03-restock-item-not-found.png`](screenshots/03-restock-item-not-found.png) | Attempting to restock an item that isn't in the inventory ("Item not found.") |
 
 ---
 
