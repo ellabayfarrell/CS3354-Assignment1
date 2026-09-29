@@ -14,12 +14,12 @@ import java.util.Scanner;
  * <ul>
  *   <li>Dang Nguyen - user menu ({@code feature-menu})</li>
  *   <li>Ella Farrell - inventory display ({@code feature-display})</li>
- *   <li>Hunter - restock and search ({@code feature-restock})</li>
+ *   <li>Hunter Norris - restock and search ({@code feature-restock})</li>
  * </ul>
  *
  * @author Dang Nguyen
  * @author Ella Farrell
- * @author Hunter
+ * @author Hunter Norris
  */
 
 public class GroceryManagement {
