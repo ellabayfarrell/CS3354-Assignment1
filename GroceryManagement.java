@@ -16,12 +16,14 @@ import java.util.Scanner;
  *   <li>Ella Farrell - inventory display ({@code feature-display})</li>
  *   <li>Hunter Norris - restock and search ({@code feature-restock})</li>
  *   <li>Kalie Newman - input validation, cleanup, and documentation ({@code cleanup})</li>
+ *   <li>Brody Malcolm - code feature enhancements, format cleanup ({@code code feature-enchancements})</li>
  * </ul>
  *
  * @author Dang Nguyen
  * @author Ella Farrell
  * @author Hunter Norris
  * @author Kalie Newman
+ * @author Brody Malcolm
  */
 
 public class GroceryManagement {
@@ -44,9 +46,10 @@ public class GroceryManagement {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-        String[] itemNames = new String[10];
-        double[] itemPrices = new double[10];
-        int[] itemStocks = new int[10];
+        final int MAX_ITEMS = 10;
+        String[] itemNames = new String[MAX_ITEMS];
+        double[] itemPrices = new double[MAX_ITEMS];
+        int[] itemStocks = new int[MAX_ITEMS];
 
         itemNames[0] = "Oranges"; itemPrices[0] = 50; itemStocks[0] = 3;
         itemNames[1] = "Apples";  itemPrices[1] = 30; itemStocks[1] = 7;
@@ -61,7 +64,7 @@ public class GroceryManagement {
             System.out.println("3. Exit");
 
             int choice = readInt(scanner, "Please enter your choice (1-3): ");
-            switch(choice) {
+            switch (choice) {
                 case 1:
                     printInventory(itemNames, itemPrices, itemStocks);
                     break;
@@ -126,11 +129,16 @@ public class GroceryManagement {
     public static void printInventory(String[] names, double[] prices, int[] stocks)
     {
         int emptySlots = 0;
-        for(int i = 0; i < names.length; i++)
+        for (int i = 0; i < names.length; i++)
         {
             if(names[i] != null)
             {
                 System.out.printf("%s - $%.2f, Stock: %d%n", names[i], prices[i], stocks[i]);
+
+                if(stocks[i] <= 2) 
+                {
+                    System.out.println("    WARNING: Low Stock!");
+                }
             }
             else
             {
@@ -153,13 +161,14 @@ public class GroceryManagement {
      * @param target the name of the item to restock
      * @param amount the quantity to add to the item's stock
      */
-    public static void restockItem(String[] names, int[] stocks, String target, int amount){
+    public static void restockItem(
+            String[] names, int[] stocks, String target, int amount){
         //flag variable to track if the target item is successfully located during the search
         boolean itemFound = false;
 
         for(int i = 0; i < names.length; i++){
-            //Using .equals() because == checks memory reference identity
-            if (names[i] != null && names[i].equals(target)){
+            //Using .equalsIgnoreCase() because == checks memory reference identity and uppercase/lower case does not matter
+            if (names[i] != null && names[i].equalsIgnoreCase(target)){
                 //Updates the stock at the parallel index mapping
                 stocks[i] += amount;
 

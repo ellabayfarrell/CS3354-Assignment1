@@ -36,6 +36,8 @@ The same index in all three arrays always refers to the same item (e.g. `itemNam
 | **Ella Farrell** | `feature-display` | Task 1 – Inventory Display | `printInventory(String[], double[], int[])` |
 | **Hunter Norris** | `feature-restock` | Task 2 – Restock & Search | `restockItem(String[], int[], String, int)` |
 | **Kalie Newman** | `cleanup` | Task 4 – Cleanup & Validation | `readInt(Scanner, String)` |
+| **Brody Malcolm** | `code-enhancement` | Task 5 – Code-enhancement & Formatting | `printInventory(String[], double[], int[])` |
+
 
 ### Dang Nguyen – User Menu (`feature-menu`)
 - Built the menu in `main` with a `Scanner` and a loop.
@@ -58,6 +60,12 @@ The same index in all three arrays always refers to the same item (e.g. `itemNam
 - Added a confirmation message after a successful restock and fixed comment/output typos (`sucessfully`, `variabklke`, `refrence`, `parrallel`).
 - Fixed the missing `@param args` in `main`'s Javadoc, corrected Javadoc indentation, and regenerated `docs/` with author tags.
 - Added a `.gitignore` for `.DS_Store` and compiled `.class` files.
+
+### Brody Malcolm – Code-enhancement & Formatting (`code-enhancement`)
+- Fixed formatting inconsistencies throughout codebase. 
+- Implemented final integer variables MAX_ITEMS for integer arrays. 
+- Implemented "low stock warnings" for when stock of an items is 2 or below.
+- Changed `.equals()` in `restockItem` to `.equalsIgnoreCase` to read both upper and lower case. 
 
 ---
 
